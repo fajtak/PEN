@@ -216,10 +216,10 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double absorption1[] = {17.5864614292*mm,16.9407732304*mm,15.5269556838*mm,13.1017418767*mm,12.3052972237*mm,2.3921737753*mm};
   assert(sizeof(absorption1) == sizeof(photonEnergy1));
 
-  G4double scintFast1[] = {0.00,0.05,0.05,0.05,0.05,0.00};
+  G4double scintFast1[] = {0.5808772811,0.9949385614,0.9964360501,0.8170115835,0.4606151824,0.2199454943};
   assert(sizeof(scintFast1) == sizeof(photonEnergy1));
 
-  G4double scintSlow1[] = {0.00,0.95,0.95,0.95,0.95,0.00};
+  G4double scintSlow1[] = {0.5808772811,0.9949385614,0.9964360501,0.8170115835,0.4606151824,0.2199454943};
   assert(sizeof(scintSlow1) == sizeof(photonEnergy1));
 
   G4MaterialPropertiesTable* penMPT = new G4MaterialPropertiesTable();
@@ -233,7 +233,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
-  penMPT->AddConstProperty("YIELDRATIO",0.8);
+  penMPT->AddConstProperty("YIELDRATIO",0.05);
 
   PEN->SetMaterialPropertiesTable(penMPT);
   //
