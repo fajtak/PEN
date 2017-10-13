@@ -84,7 +84,7 @@ int main(int argc,char** argv)
   // Detector construction
   runManager->SetUserInitialization(new PENDetectorConstruction());
   // Physics list
-  runManager->SetUserInitialization(new PENPhysicsList());
+  runManager-> SetUserInitialization(new PENPhysicsList());
   // User action initialization
   runManager->SetUserInitialization(new PENActionInitialization());
 

@@ -11,18 +11,21 @@ class G4Event;
 
 class PENPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PENPrimaryGeneratorAction();
-    virtual ~PENPrimaryGeneratorAction();
+public:
+	PENPrimaryGeneratorAction();
+	virtual ~PENPrimaryGeneratorAction();
 
-  public:
-    virtual void GeneratePrimaries(G4Event*);
+public:
+	virtual void GeneratePrimaries(G4Event*);
 
-    void SetOptPhotonPolar();
-    void SetOptPhotonPolar(G4double);
+	void  SetSourceType(G4int newType);
+	G4int GetSourceType(void){return fSourceType;};
+	void SetPhotonWavelength(G4double newValue);
 
-  private:
-    G4ParticleGun* fParticleGun;
+private:
+	G4ParticleGun*  fParticleGun;
+	G4int           fSourceType;
+	G4double		fPhotonWavelength;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
