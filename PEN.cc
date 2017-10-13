@@ -1,8 +1,5 @@
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
 #include "G4RunManager.hh"
-#endif
+
 
 #include "G4UImanager.hh"
 
@@ -123,6 +120,7 @@ int main(int argc,char** argv)
 #endif
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
+        //UImanager->ApplyCommand("/tracking/verbose 1");
      ui->SessionStart();
      delete ui;
 #endif

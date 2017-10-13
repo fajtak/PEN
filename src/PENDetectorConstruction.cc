@@ -205,29 +205,25 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 // PEN
 //
 //{400nm, 425nm, 430nm, 450nm,475nm,500nm}
-  G4double photonEnergy1[] = {3.099605*eV, 2.917275*eV, 2.883353*eV,2.755204*eV,2.610194*eV,2.479684*eV};
-  const G4int nEntries1 = sizeof(photonEnergy1);
+  G4double photonEnergy1[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV, 2.917275*eV, 3.099605*eV};
+  const G4int nEntries1 = sizeof(photonEnergy1)/sizeof(G4double);
 
-  G4double refractiveIndex3[] = {1.638,1.638,1.638,1.638,1.638,1.638};
+  G4double refractiveIndex3[] = {1.638, 1.638, 1.638, 1.638, 1.638, 1.638};
 
   G4double absorption1[] = {2.3921737753*cm,12.3052972237*cm,13.1017418767*cm,15.5269556838*cm,16.9407732304*cm,17.5864614292*cm};
 
-  G4double scintFast1[] = {0.05,0.05,0.05,0.05,0.05,0.05};
+  G4double scintFast1[] = {0.00,0.05,0.05,0.05,0.05,0.00};
 
-  G4double scintSlow1[] = {0.95,0.95,0.95,0.95,0.95,0.95};
+  G4double scintSlow1[] = {0.00,0.95,0.95,0.95,0.95,0.00};
 
   G4MaterialPropertiesTable* penMPT = new G4MaterialPropertiesTable();
 
-  penMPT->AddProperty("RINDEX",       photonEnergy1, refractiveIndex3, nEntries1)
-        ->SetSpline(true);
-  penMPT->AddProperty("ABSLENGTH",    photonEnergy1, absorption1, nEntries1)
-        ->SetSpline(true);
-  penMPT->AddProperty("FASTCOMPONENT",photonEnergy1, scintFast1, nEntries1)
-        ->SetSpline(true);
-  penMPT->AddProperty("SLOWCOMPONENT",photonEnergy1, scintSlow1, nEntries1)
-        ->SetSpline(true);
+  penMPT->AddProperty("RINDEX",       photonEnergy1, refractiveIndex3, nEntries1)->SetSpline(true);
+  penMPT->AddProperty("ABSLENGTH",    photonEnergy1, absorption1, nEntries1)->SetSpline(true);
+  penMPT->AddProperty("FASTCOMPONENT",photonEnergy1, scintFast1, nEntries1)->SetSpline(true);
+  penMPT->AddProperty("SLOWCOMPONENT",photonEnergy1, scintSlow1, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -238,13 +234,13 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   // Air
   //
     G4double refractiveIndex2[] =
-              { 1.00 };
+              { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
 
     G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
     myMPT2->AddProperty("RINDEX", photonEnergy1, refractiveIndex2, nEntries1);
 
     G4cout << "Air G4MaterialPropertiesTable" << G4endl;
-    myMPT2->DumpTable();
+    //myMPT2->DumpTable();
 
     air->SetMaterialPropertiesTable(myMPT2);
 

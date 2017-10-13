@@ -56,6 +56,9 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	switch (fSourceType) {
 		case 0: 
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("e-"));
+			fParticleGun->SetParticleEnergy(2.0*MeV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,-1.0*cm));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 			break;
 		case 1: 
 			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy));
