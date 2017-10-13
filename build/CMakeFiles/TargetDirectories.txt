@@ -1,0 +1,7 @@
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/install/strip.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/install/local.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/PEN.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/edit_cache.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/rebuild_cache.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/install.dir
+/home/fajtak/work/g4work/PEN/build/CMakeFiles/list_install_components.dir
