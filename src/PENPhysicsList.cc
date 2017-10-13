@@ -24,6 +24,17 @@
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
+#include "G4UnitsTable.hh"
+#include "G4ParticleTypes.hh"
+#include "G4PhysicsListHelper.hh"
+#include "G4RadioactiveDecay.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4NuclideTable.hh"
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
+
 G4ThreadLocal G4int PENPhysicsList::fVerboseLevel = 1;
 G4ThreadLocal G4int PENPhysicsList::fMaxNumPhotonStep = 20;
 G4ThreadLocal G4Cerenkov* PENPhysicsList::fCerenkovProcess = 0;
@@ -85,7 +96,7 @@ void PENPhysicsList::ConstructProcess()
 
 void PENPhysicsList::ConstructDecay()
 {
-  // Add Decay Process
+  /*// Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
@@ -98,7 +109,28 @@ void PENPhysicsList::ConstructDecay()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+  }*/
+
+  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+
+  radioactiveDecay->SetARM(false);               //Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
+
+  // Need to initialize atomic deexcitation outside of radioactive decay
+  G4LossTableManager* theManager = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* p = theManager->AtomDeexcitation();
+  if (!p) {
+     G4UAtomicDeexcitation* atomDeex = new G4UAtomicDeexcitation();
+     theManager->SetAtomDeexcitation(atomDeex);
+     atomDeex->InitialiseAtomicDeexcitation();
   }
+  //
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,7 +249,7 @@ void PENPhysicsList::ConstructOp()
       pmanager->AddProcess(fCerenkovProcess);
       pmanager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    if (fScintillationProcess->IsApplicable(*particle)) {
+    if (fScintillationProcess->IsApplicable(*particle) && particle->GetParticleType() != "nucleus") {
       pmanager->AddProcess(fScintillationProcess);
       pmanager->SetProcessOrderingToLast(fScintillationProcess, idxAtRest);
       pmanager->SetProcessOrderingToLast(fScintillationProcess, idxPostStep);
