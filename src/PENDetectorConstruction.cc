@@ -6,10 +6,12 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,6 +46,11 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   air->AddElement(N, 70.*perCent);
   air->AddElement(O, 30.*perCent);
 
+  G4NistManager* man = G4NistManager::Instance();
+
+  G4Material* glass = man->FindOrBuildMaterial("G4_Pyrex_Glass");
+
+  G4Material* aluminium = man->FindOrBuildMaterial("G4_Al");
 // Water
 //
   G4Element* H = new G4Element("Hydrogen", "H", z=1 , a=1.01*g/mole);
@@ -53,6 +60,10 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   water->AddElement(O, 1);
 
   G4Element* C = new G4Element("Carbon", "C", z=12, a=12*g/mole);
+
+  //
+  // PEN
+  //
 
   G4Material* PEN = new G4Material("PEN", density= 1.36*g/cm3, nelements=3);
   G4int number_of_atoms;
@@ -247,6 +258,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
     air->SetMaterialPropertiesTable(myMPT2);
 
+
 //
 // ------------- Volumes --------------
 
@@ -290,6 +302,33 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
 
   G4VPhysicalVolume* penTile_phys = new G4PVPlacement(0,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
+
+// PMT
+  G4double innerRadius_pmt = 0.*cm;
+  G4double outerRadius_pmt = 5.3*cm;
+  G4double outerRadius_cath = 4.6*cm;
+  G4double height_pmt = 63.5*mm;
+  G4double startAngle_pmt = 0.*deg;
+  G4double spanningAngle_pmt = 360.*deg;
+
+  G4Tubs* pmt = new G4Tubs("pmt_tube",innerRadius_pmt,outerRadius_pmt, height_pmt,startAngle_pmt,spanningAngle_pmt);
+
+  //the "photocathode" is a metal slab at the back of the glass that
+  //is only a very rough approximation of the real thing since it only
+  //absorbs or detects the photons based on the efficiency set below
+
+
+  G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,66.5*mm),pmt_log,"pmt",expHall_log,false,0);
+
+  G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
+                          height_pmt,startAngle_pmt,spanningAngle_pmt);
+  G4LogicalVolume* Photocath_log = new G4LogicalVolume(Photocath,
+                                       aluminium,
+                                       "photocath_log");
+
+  G4VPhysicalVolume* cath_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),
+  Photocath_log,"photocath",pmt_log,false,0);
 
 // ------------- Surfaces --------------
 //
