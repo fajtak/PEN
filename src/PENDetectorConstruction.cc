@@ -205,16 +205,22 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 // PEN
 //
 //{400nm, 425nm, 430nm, 450nm,475nm,500nm}
+
   G4double photonEnergy1[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV, 2.917275*eV, 3.099605*eV};
   const G4int nEntries1 = sizeof(photonEnergy1)/sizeof(G4double);
 
   G4double refractiveIndex3[] = {1.638, 1.638, 1.638, 1.638, 1.638, 1.638};
+  assert(sizeof(refractiveIndex3) == sizeof(photonEnergy1));
 
-  G4double absorption1[] = {2.3921737753*cm,12.3052972237*cm,13.1017418767*cm,15.5269556838*cm,16.9407732304*cm,17.5864614292*cm};
+
+  G4double absorption1[] = {17.5864614292*mm,16.9407732304*mm,15.5269556838*mm,13.1017418767*mm,12.3052972237*mm,2.3921737753*mm};
+  assert(sizeof(absorption1) == sizeof(photonEnergy1));
 
   G4double scintFast1[] = {0.00,0.05,0.05,0.05,0.05,0.00};
+  assert(sizeof(scintFast1) == sizeof(photonEnergy1));
 
   G4double scintSlow1[] = {0.00,0.95,0.95,0.95,0.95,0.00};
+  assert(sizeof(scintSlow1) == sizeof(photonEnergy1));
 
   G4MaterialPropertiesTable* penMPT = new G4MaterialPropertiesTable();
 
@@ -234,13 +240,10 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   // Air
   //
     G4double refractiveIndex2[] =
-              { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
-
+            { 1.00,1.00,1.00,1.00,1.00,1.00 };
+        //  { 1.50,1.50,1.50,1.50,1.50,1.50 };
     G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
     myMPT2->AddProperty("RINDEX", photonEnergy1, refractiveIndex2, nEntries1);
-
-    G4cout << "Air G4MaterialPropertiesTable" << G4endl;
-    //myMPT2->DumpTable();
 
     air->SetMaterialPropertiesTable(myMPT2);
 
