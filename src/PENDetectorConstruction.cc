@@ -16,8 +16,8 @@
 PENDetectorConstruction::PENDetectorConstruction()
  : G4VUserDetectorConstruction()
 {
-  fExpHall_x = fExpHall_y = fExpHall_z = 10.0*m;
-  fTank_x    = fTank_y    = fTank_z    =  5.0*m;
+  fExpHall_x = fExpHall_y = fExpHall_z = 0.5*m;
+  fTank_x    = fTank_y    = fTank_z    =  0.5*m;
   fBubble_x  = fBubble_y  = fBubble_z  =  0.5*m;
 }
 
@@ -52,9 +52,18 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   water->AddElement(H, 2);
   water->AddElement(O, 1);
 
+  G4Element* C = new G4Element("Carbon", "C", z=12, a=12*g/mole);
+
+  G4Material* PEN = new G4Material("PEN", density= 1.36*g/cm3, nelements=3);
+  G4int number_of_atoms;
+	PEN->AddElement(O, number_of_atoms=4);
+	PEN->AddElement(H, number_of_atoms=10);
+	PEN->AddElement(C, number_of_atoms=14);
 //
 // ------------ Generate & Add Material Properties Table ------------
 //
+
+/*
   G4double photonEnergy[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -189,24 +198,55 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   // Set the Birks Constant for the Water scintillator
 
   water->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+*/
+
 
 //
-// Air
+// PEN
 //
-  G4double refractiveIndex2[] =
-            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00 };
+//{400nm, 425nm, 430nm, 450nm,475nm,500nm}
+  G4double photonEnergy1[] = {3.099605*eV, 2.917275*eV, 2.883353*eV,2.755204*eV,2.610194*eV,2.479684*eV};
+  const G4int nEntries1 = sizeof(photonEnergy1);
 
-  G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
-  myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2, nEntries);
+  G4double refractiveIndex3[] = {1.638,1.638,1.638,1.638,1.638,1.638};
 
-  G4cout << "Air G4MaterialPropertiesTable" << G4endl;
-  myMPT2->DumpTable();
+  G4double absorption1[] = {2.3921737753*cm,12.3052972237*cm,13.1017418767*cm,15.5269556838*cm,16.9407732304*cm,17.5864614292*cm};
 
-  air->SetMaterialPropertiesTable(myMPT2);
+  G4double scintFast1[] = {0.05,0.05,0.05,0.05,0.05,0.05};
+
+  G4double scintSlow1[] = {0.95,0.95,0.95,0.95,0.95,0.95};
+
+  G4MaterialPropertiesTable* penMPT = new G4MaterialPropertiesTable();
+
+  penMPT->AddProperty("RINDEX",       photonEnergy1, refractiveIndex3, nEntries1)
+        ->SetSpline(true);
+  penMPT->AddProperty("ABSLENGTH",    photonEnergy1, absorption1, nEntries1)
+        ->SetSpline(true);
+  penMPT->AddProperty("FASTCOMPONENT",photonEnergy1, scintFast1, nEntries1)
+        ->SetSpline(true);
+  penMPT->AddProperty("SLOWCOMPONENT",photonEnergy1, scintSlow1, nEntries1)
+        ->SetSpline(true);
+
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
+  penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
+  penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
+  penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
+  penMPT->AddConstProperty("YIELDRATIO",0.8);
+
+  PEN->SetMaterialPropertiesTable(penMPT);
+  //
+  // Air
+  //
+    G4double refractiveIndex2[] =
+              { 1.00 };
+
+    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
+    myMPT2->AddProperty("RINDEX", photonEnergy1, refractiveIndex2, nEntries1);
+
+    G4cout << "Air G4MaterialPropertiesTable" << G4endl;
+    myMPT2->DumpTable();
+
+    air->SetMaterialPropertiesTable(myMPT2);
 
 //
 // ------------- Volumes --------------
@@ -223,6 +263,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
 // The Water Tank
 //
+/*
   G4Box* waterTank_box = new G4Box("Tank",fTank_x,fTank_y,fTank_z);
 
   G4LogicalVolume* waterTank_log
@@ -242,11 +283,20 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 //G4VPhysicalVolume* bubbleAir_phys =
       new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),bubbleAir_log,"Bubble",
                         waterTank_log,false,0);
+*/
+
+// PEN Tile
+  G4Box* penTile_box = new G4Box("Tile", 30*mm,30*mm, 3*mm);
+
+  G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
+
+  G4VPhysicalVolume* penTile_phys = new G4PVPlacement(0,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
 
 // ------------- Surfaces --------------
 //
 // Water Tank
 //
+/*
   G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
   opWaterSurface->SetType(dielectric_dielectric);
   opWaterSurface->SetFinish(ground);
@@ -254,9 +304,10 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   new G4LogicalBorderSurface("WaterSurface",
                                  waterTank_phys,expHall_phys,opWaterSurface);
-
+*/
 // Air Bubble
 //
+/*
   G4OpticalSurface* opAirSurface = new G4OpticalSurface("AirSurface");
   opAirSurface->SetType(dielectric_dielectric);
   opAirSurface->SetFinish(polished);
@@ -292,7 +343,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
   myST1->DumpTable();
 
-  opWaterSurface->SetMaterialPropertiesTable(myST1);
+//  opWaterSurface->SetMaterialPropertiesTable(myST1);
 
   //OpticalAirSurface
   G4double reflectivity[num] = {0.3, 0.5};
@@ -307,7 +358,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   myST2->DumpTable();
 
   opAirSurface->SetMaterialPropertiesTable(myST2);
-
+*/
 //always return the physical World
   return expHall_phys;
 }
