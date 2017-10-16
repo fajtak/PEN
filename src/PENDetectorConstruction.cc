@@ -50,6 +50,15 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4Material* glass = man->FindOrBuildMaterial("G4_Pyrex_Glass");
 
+  G4MaterialPropertiesTable* glassMPT = new G4MaterialPropertiesTable();
+  G4double photonEnergy2[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV, 2.917275*eV, 3.099605*eV};
+  G4double refractiveIndex4[] = {1.52, 1.52, 1.52, 1.52, 1.52, 1.52};
+  G4double absorption[] = {10*m,10*m,10*m,10*m,10*m,10*m};
+  assert(sizeof(refractiveIndex4) == sizeof(photonEnergy2));
+  glassMPT->AddProperty("RINDEX",refractiveIndex4,photonEnergy2,6);
+  glassMPT->AddProperty("ABSLENGTH",absorption,photonEnergy2,6);
+  glass->SetMaterialPropertiesTable(glassMPT);
+
   G4Material* aluminium = man->FindOrBuildMaterial("G4_Al");
 // Water
 //
@@ -244,7 +253,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",photonEnergy1, scintFast1, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",photonEnergy1, scintSlow1, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",1000./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -301,7 +310,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 */
 
 // PEN Tile
-  G4Box* penTile_box = new G4Box("Tile", 30*mm,30*mm, 3*mm);
+  G4Box* penTile_box = new G4Box("Tile", 15*mm,15*mm, 1.5*mm);
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
 
@@ -312,7 +321,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double outerRadius_pmt = 5.3*cm;
   G4double outerRadius_cath = 4.6*cm;
   G4double height_pmt = 63.5*mm;
-  G4double height_cath = 62.*mm;
+  G4double height_cath = 63.5*mm;
   G4double startAngle_pmt = 0.*deg;
   G4double spanningAngle_pmt = 360.*deg;
 
@@ -324,7 +333,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
 
   G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
-  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,66.5*mm),pmt_log,"pmt",expHall_log,false,0);
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,65*mm),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_cath,startAngle_pmt,spanningAngle_pmt);
