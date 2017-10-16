@@ -55,8 +55,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double refractiveIndex4[] = {1.52, 1.52, 1.52, 1.52, 1.52, 1.52};
   G4double absorption[] = {10*m,10*m,10*m,10*m,10*m,10*m};
   assert(sizeof(refractiveIndex4) == sizeof(photonEnergy2));
-  glassMPT->AddProperty("RINDEX",refractiveIndex4,photonEnergy2,6);
-  glassMPT->AddProperty("ABSLENGTH",absorption,photonEnergy2,6);
+  glassMPT->AddProperty("RINDEX",photonEnergy2,refractiveIndex4,6)->SetSpline(true);
+  glassMPT->AddProperty("ABSLENGTH",photonEnergy2,absorption,6);
   glass->SetMaterialPropertiesTable(glassMPT);
 
   G4Material* aluminium = man->FindOrBuildMaterial("G4_Al");
@@ -321,7 +321,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double outerRadius_pmt = 5.3*cm;
   G4double outerRadius_cath = 4.6*cm;
   G4double height_pmt = 63.5*mm;
-  G4double height_cath = 63.5*mm;
+  G4double height_cath = 62.*mm;
   G4double startAngle_pmt = 0.*deg;
   G4double spanningAngle_pmt = 360.*deg;
 
