@@ -39,4 +39,5 @@ void PENEventAction::EndOfEventAction(const G4Event* myEvent)
 	auto analysisManager = G4AnalysisManager::Instance(); 
 
 	analysisManager->FillH1(0,fDetectedPhotons);
+	G4cout << fDetectedPhotons << G4endl;
 }
