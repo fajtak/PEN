@@ -227,6 +227,10 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double absorption1[] = {17.5864614292*mm,16.9407732304*mm,15.5269556838*mm,13.1017418767*mm,12.3052972237*mm,2.3921737753*mm};
   assert(sizeof(absorption1) == sizeof(photonEnergy1));
 
+// Old tile absoprtion
+//G4double absorption1[] = {1.33*mm,3.72*mm, 3.85*mm,4.14*mm,4.43*mm,4.63*mm};
+//  assert(sizeof(absorption1) == sizeof(photonEnergy1));
+
   G4double scintFast1[] = {0.5808772811,0.9949385614,0.9964360501,0.8170115835,0.4606151824,0.2199454943};
   assert(sizeof(scintFast1) == sizeof(photonEnergy1));
 
@@ -323,12 +327,29 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_pmt,startAngle_pmt,spanningAngle_pmt);
-  G4LogicalVolume* Photocath_log = new G4LogicalVolume(Photocath,
+  G4LogicalVolume* photocath_log = new G4LogicalVolume(Photocath,
                                        aluminium,
                                        "photocath_log");
 
   G4VPhysicalVolume* cath_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),
-  Photocath_log,"photocath",pmt_log,false,0);
+  photocath_log,"photocath",pmt_log,false,0);
+
+  G4double photocath_EFF[]={0.25,0.23,0.22,0.20,0.19,0.16};
+  assert(sizeof(photocatch_EFF) == sizeof(photonEnergy1));
+  G4double photocath_REFL[] = {0.,0.,0.,0.,0.,0.};
+  assert(sizeof(photocath_REFL) == sizeof(photonEnergy1));
+
+  G4OpticalSurface* photocath_optsurf = new G4OpticalSurface("photocath_opsurf",glisur,polished, dielectric_metal);
+  G4MaterialPropertiesTable* photocath_MT = new G4MaterialPropertiesTable();
+  photocath_MT->AddProperty("EFFICIENCY", photonEnergy1, photocath_EFF,nEntries1);
+  photocath_MT->AddProperty("REFLECTIVITY", photonEnergy1, photocath_REFL,nEntries1);
+  photocath_optsurf->SetMaterialPropertiesTable(photocath_MT);
+  new G4LogicalSkinSurface("photocath_surf",photocath_log,photocath_optsurf);
+
+
+//-------------- Define Sensative Detector --------------
+
+//  boundaryStatus=boundary->GetStatus();
 
 // ------------- Surfaces --------------
 //
