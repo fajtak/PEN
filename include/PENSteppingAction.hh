@@ -36,11 +36,14 @@
 
 #include "G4OpBoundaryProcess.hh"
 
+
+class PENEventAction;
+
 class PENSteppingAction : public G4UserSteppingAction
 {
   public:
 
-    PENSteppingAction();
+    PENSteppingAction(PENEventAction* eventAction);
     virtual ~PENSteppingAction();
     virtual void UserSteppingAction(const G4Step*);
 
@@ -52,6 +55,8 @@ class PENSteppingAction : public G4UserSteppingAction
     G4bool fOneStepPrimaries;
 
     G4OpBoundaryProcessStatus fExpectedNextStatus;
+
+    PENEventAction* fEventAction;
 };
 
 #endif

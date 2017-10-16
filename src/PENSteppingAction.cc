@@ -1,4 +1,5 @@
 #include "PENSteppingAction.hh"
+#include "PENEventAction.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4SDManager.hh"
@@ -15,8 +16,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PENSteppingAction::PENSteppingAction()
-: fOneStepPrimaries(false)
+PENSteppingAction::PENSteppingAction(PENEventAction* eventAction)
+: fOneStepPrimaries(false), fEventAction(eventAction)
 {
 	fExpectedNextStatus = Undefined;
 }
@@ -90,7 +91,7 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 	  		fExpectedNextStatus=Undefined;
 	  		switch(boundaryStatus){
 		  		case Absorption:
-		  			G4cout << "Photon absorbed" << G4endl;
+		  			//G4cout << "Photon absorbed" << G4endl;
 		  			break;
 		      	case Detection: //Note, this assumes that the volume causing detection
 		                      //is the photocathode because it is the only one with
@@ -103,7 +104,8 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 			        // PENPMTSD* pmtSD = (PENPMTSD*)SDman->FindSensitiveDetector(sdName);
 			        // if(pmtSD)pmtSD->ProcessHits_constStep(theStep,NULL);
 			        // trackInformation->AddTrackStatusFlag(hitPMT);
-			      	G4cout << "Photon detected" << G4endl;
+			      	//G4cout << "Photon detected" << G4endl;
+			      	fEventAction->AddDetectedPhoton();
 			      	break;
 		      	}
 		      	case FresnelReflection:

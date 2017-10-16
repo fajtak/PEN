@@ -19,7 +19,7 @@ class PENEventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event* event);
     virtual void EndOfEventAction(const G4Event* event);
 
-    void    AddDetectedPhoton(void){};
+    void    AddDetectedPhoton(void){fDetectedPhotons++;};
     G4int   GetNumberDetectedPhotons(void){return fDetectedPhotons;};
 
   private:
