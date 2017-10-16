@@ -134,7 +134,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",1./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -210,8 +210,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4OpticalSurface* photocath_optsurf = new G4OpticalSurface("photocath_opsurf",glisur,polished, dielectric_metal);
   G4MaterialPropertiesTable* photocath_MT = new G4MaterialPropertiesTable();
-  photocath_MT->AddProperty("EFFICIENCY", absEnergy, photocath_EFF,6);
-  photocath_MT->AddProperty("REFLECTIVITY", absEnergy, photocath_REFL,6);
+  photocath_MT->AddProperty("EFFICIENCY", photocath_energy, photocath_EFF,6);
+  photocath_MT->AddProperty("REFLECTIVITY", photocath_energy, photocath_REFL,6);
   photocath_optsurf->SetMaterialPropertiesTable(photocath_MT);
   new G4LogicalSkinSurface("photocath_surf",photocath_log,photocath_optsurf);
 
