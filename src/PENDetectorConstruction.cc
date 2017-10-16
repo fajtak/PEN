@@ -312,6 +312,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double outerRadius_pmt = 5.3*cm;
   G4double outerRadius_cath = 4.6*cm;
   G4double height_pmt = 63.5*mm;
+  G4double height_cath = 62.*mm;
   G4double startAngle_pmt = 0.*deg;
   G4double spanningAngle_pmt = 360.*deg;
 
@@ -326,7 +327,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,66.5*mm),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
-                          height_pmt,startAngle_pmt,spanningAngle_pmt);
+                          height_cath,startAngle_pmt,spanningAngle_pmt);
   G4LogicalVolume* photocath_log = new G4LogicalVolume(Photocath,
                                        aluminium,
                                        "photocath_log");
