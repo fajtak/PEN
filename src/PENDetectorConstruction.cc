@@ -74,7 +74,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   // PEN
   //
 
-  G4Material* PEN = new G4Material("PEN", density= 1.36*g/cm3, nelements=3);
+  G4Material* PEN = new G4Material("PEN", density= 1.3*g/cm3, nelements=3);
   G4int number_of_atoms;
 	PEN->AddElement(O, number_of_atoms=4);
 	PEN->AddElement(H, number_of_atoms=10);
@@ -229,16 +229,17 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4double photonEnergy1[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV, 2.917275*eV, 3.099605*eV};
   const G4int nEntries1 = sizeof(photonEnergy1)/sizeof(G4double);
 
-  G4double refractiveIndex3[] = {1.638, 1.638, 1.638, 1.638, 1.638, 1.638};
+  G4double refractiveIndex3[] = {1.65, 1.65, 1.65, 1.65, 1.65, 1.65};
+  //G4double refractiveIndex3[] = {1.638, 1.638, 1.638, 1.638, 1.638, 1.638};
   assert(sizeof(refractiveIndex3) == sizeof(photonEnergy1));
 
 
-  G4double absorption1[] = {17.5864614292*mm,16.9407732304*mm,15.5269556838*mm,13.1017418767*mm,12.3052972237*mm,2.3921737753*mm};
-  assert(sizeof(absorption1) == sizeof(photonEnergy1));
+  // G4double absorption1[] = {17.5864614292*mm,16.9407732304*mm,15.5269556838*mm,13.1017418767*mm,12.3052972237*mm,2.3921737753*mm};
+  // assert(sizeof(absorption1) == sizeof(photonEnergy1));
 
 // Old tile absoprtion
-//G4double absorption1[] = {1.33*mm,3.72*mm, 3.85*mm,4.14*mm,4.43*mm,4.63*mm};
-//  assert(sizeof(absorption1) == sizeof(photonEnergy1));
+G4double absorption1[] = {1.33*mm,3.72*mm, 3.85*mm,4.14*mm,4.43*mm,4.63*mm};
+  assert(sizeof(absorption1) == sizeof(photonEnergy1));
 
   G4double scintFast1[] = {0.5808772811,0.9949385614,0.9964360501,0.8170115835,0.4606151824,0.2199454943};
   assert(sizeof(scintFast1) == sizeof(photonEnergy1));
@@ -253,7 +254,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",photonEnergy1, scintFast1, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",photonEnergy1, scintSlow1, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",1000./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -310,7 +311,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 */
 
 // PEN Tile
-  G4Box* penTile_box = new G4Box("Tile", 15*mm,15*mm, 1.5*mm);
+  G4Box* penTile_box = new G4Box("Tile", 17.5*mm,17.5*mm, 2.5*mm);
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
 
@@ -333,7 +334,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
 
   G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
-  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,65*mm),pmt_log,"pmt",expHall_log,false,0);
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,66*mm),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_cath,startAngle_pmt,spanningAngle_pmt);

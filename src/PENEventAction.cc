@@ -28,7 +28,8 @@ PENEventAction::~PENEventAction()
 void PENEventAction::BeginOfEventAction(const G4Event* myEvent)
 {    
 	fDetectedPhotons = 0;
-	if (myEvent->GetEventID() % 100000 == 0)
+	fDepositedEnergy = 0;
+	if (myEvent->GetEventID() % 1000 == 0)
 		G4cout << "event no.: " << myEvent->GetEventID() << G4endl;
 }
 
@@ -38,6 +39,9 @@ void PENEventAction::EndOfEventAction(const G4Event* myEvent)
 {   
 	auto analysisManager = G4AnalysisManager::Instance(); 
 
-	analysisManager->FillH1(0,fDetectedPhotons);
-	G4cout << fDetectedPhotons << G4endl;
+	if (fDetectedPhotons > 0)
+		analysisManager->FillH1(0,fDetectedPhotons);
+	if (fDepositedEnergy > 0)
+		analysisManager->FillH1(1,fDepositedEnergy);
+	//G4cout << fDetectedPhotons << G4endl;
 }

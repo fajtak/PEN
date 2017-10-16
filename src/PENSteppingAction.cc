@@ -13,6 +13,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -30,6 +31,7 @@ PENSteppingAction::~PENSteppingAction() {}
 
 void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 {
+	fEventAction->AddDepositedEnergy(theStep->GetTotalEnergyDeposit()/MeV);
 
 	G4Track* theTrack = theStep->GetTrack();
 
