@@ -27,9 +27,11 @@ void PENActionInitialization::BuildForMaster() const
 
 void PENActionInitialization::Build() const
 {
+	PENRunAction* pPENRunAction = new PENRunAction();
+
   SetUserAction(new PENPrimaryGeneratorAction());
-  SetUserAction(new PENRunAction());
-  SetUserAction(new PENEventAction());
+  SetUserAction(pPENRunAction);
+  SetUserAction(new PENEventAction(pPENRunAction));
   SetUserAction(new PENSteppingAction());
   // SetUserAction(new PENStackingAction());
 }
