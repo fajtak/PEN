@@ -107,6 +107,9 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
     while(!ReadAbs.eof())
     {
       ReadAbs>>wavelength>>filler>>varabsorlength>>filler>>ems>>filler>>rindex;
+      if(ReadAbs.eof()){
+        break;
+      }
       cout<<absEntries << " " <<wavelength << " " << varabsorlength << " " << ems <<endl;
       absEnergy[absEntries] = (1240/wavelength)*eV;
       abs[absEntries] = varabsorlength*mm;
@@ -146,7 +149,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
             { 1.00,1.00,1.00,1.00,1.00,1.00 };
         //  { 1.50,1.50,1.50,1.50,1.50,1.50 };
     G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
-    myMPT2->AddProperty("RINDEX", absEnergy, refractiveIndex2, nEntries1);
+    myMPT2->AddProperty("RINDEX", absEnergy, refractiveIndex2, 6);
 
     air->SetMaterialPropertiesTable(myMPT2);
 
@@ -199,7 +202,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4VPhysicalVolume* cath_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),
   photocath_log,"photocath",pmt_log,false,0);
 
-  G4double photocath_energy[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV , 2.610194*eV, 3.099605*eV};
+  G4double photocath_energy[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV , 2.917275*eV, 3.099605*eV};
   G4double photocath_EFF[]={0.25,0.23,0.22,0.20,0.19,0.16};
   assert(sizeof(photocatch_EFF) == sizeof(photocath_energy));
   G4double photocath_REFL[] = {0.,0.,0.,0.,0.,0.};
