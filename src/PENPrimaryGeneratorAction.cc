@@ -63,7 +63,7 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			break;
 		case 1:
 			fParticleGun->SetParticleEnergy(0*eV);
-			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,1.0*cm));
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-1.0*cm));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(83,207,excitEnergy));
 			fParticleGun->SetParticleCharge(ionCharge);

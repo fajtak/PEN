@@ -47,7 +47,8 @@ G4ThreadLocal G4OpBoundaryProcess* PENPhysicsList::fBoundaryProcess = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PENPhysicsList::PENPhysicsList() 
- : G4VUserPhysicsList() {}
+ : G4VUserPhysicsList() {
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,6 +87,8 @@ void PENPhysicsList::ConstructProcess()
   ConstructDecay();
   ConstructEM();
   ConstructOp();
+
+  SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
