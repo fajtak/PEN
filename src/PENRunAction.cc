@@ -5,6 +5,8 @@
 
 #include "G4Run.hh"
 
+#include "PenAnalysis.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PENRunAction::PENRunAction()
@@ -27,6 +29,12 @@ void PENRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   fTimer->Start();
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+  man->OpenFile("penOutput");
+
+  man->CreateH1("0","N Photons Detected",100,0,1000);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +44,10 @@ void PENRunAction::EndOfRunAction(const G4Run* aRun)
   fTimer->Stop();
   G4cout << "number of event = " << aRun->GetNumberOfEvent()
          << " " << *fTimer << G4endl;
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
