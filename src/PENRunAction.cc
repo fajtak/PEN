@@ -5,7 +5,7 @@
 
 #include "G4Run.hh"
 
-#include "PenAnalysis.hh"
+#include "PENAnalysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
