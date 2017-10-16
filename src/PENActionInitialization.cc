@@ -1,6 +1,7 @@
 #include "PENActionInitialization.hh"
 #include "PENPrimaryGeneratorAction.hh"
 #include "PENRunAction.hh"
+#include "PENEventAction.hh"
 #include "PENSteppingAction.hh"
 // #include "OpNoviceStackingAction.hh"
 
@@ -28,6 +29,7 @@ void PENActionInitialization::Build() const
 {
   SetUserAction(new PENPrimaryGeneratorAction());
   SetUserAction(new PENRunAction());
+  SetUserAction(new PENEventAction());
   SetUserAction(new PENSteppingAction());
   // SetUserAction(new PENStackingAction());
 }
