@@ -31,7 +31,6 @@ PENSteppingAction::~PENSteppingAction() {}
 
 void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 {
-	fEventAction->AddDepositedEnergy(theStep->GetTotalEnergyDeposit()/MeV);
 
 	G4Track* theTrack = theStep->GetTrack();
 
@@ -39,6 +38,10 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 
 	G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
 	G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
+
+	if ( thePrePV->GetName()=="Tile"){
+		fEventAction->AddDepositedEnergy(theStep->GetTotalEnergyDeposit()/MeV);
+	}
 
 	G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 	G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();

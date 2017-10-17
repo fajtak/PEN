@@ -101,6 +101,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
 //  G4String abs_file = "../input_files/OldPen.csv";
 //  G4String abs_file = "../input_files/highAbs.csv";
+// G4String abs_file = "../input_files/flatAbs.csv";
     G4String abs_file = "../input_files/Exp4.csv";
   ReadAbs.open(abs_file);
 
@@ -208,7 +209,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   photocath_log,"photocath",pmt_log,false,0);
 
   G4double photocath_energy[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV , 2.917275*eV, 3.099605*eV};
-  G4double photocath_EFF[]={0.25,0.23,0.22,0.20,0.19,0.16};
+  G4double photocath_EFF[]={0.16,0.19,0.20,0.22,0.23,0.25};
   assert(sizeof(photocatch_EFF) == sizeof(photocath_energy));
   G4double photocath_REFL[] = {0.,0.,0.,0.,0.,0.};
   assert(sizeof(photocath_REFL) == sizeof(photocath_energy));

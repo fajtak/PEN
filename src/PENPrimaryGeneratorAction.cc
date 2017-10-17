@@ -13,7 +13,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PENPrimaryGeneratorAction::PENPrimaryGeneratorAction()
-: G4VUserPrimaryGeneratorAction(), 
+: G4VUserPrimaryGeneratorAction(),
 fParticleGun(0)
 {
 	G4int n_particle = 1;
@@ -24,7 +24,7 @@ fParticleGun(0)
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
-	fSourceType = 1;
+	fSourceType = 0;
 	fPhotonWavelength = 0;
 }
 
@@ -55,9 +55,9 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
 	switch (fSourceType) {
-		case 0: 
+		case 0:
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("e-"));
-			fParticleGun->SetParticleEnergy(2.0*MeV);
+			fParticleGun->SetParticleEnergy(0.3*MeV);
 			fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,-1.0*cm));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 			break;
@@ -67,14 +67,14 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(83,207,excitEnergy));
 			fParticleGun->SetParticleCharge(ionCharge);
-			break;	
-		case 2: 
+			break;
+		case 2:
 			fParticleGun->SetParticleEnergy(0*eV);
 			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,1.0*cm));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 			fParticleGun->SetParticleDefinition(G4IonTable::GetIonTable()->GetIon(38,90,excitEnergy));
 			fParticleGun->SetParticleCharge(ionCharge);
-			break;	
+			break;
 		case 3:
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("mu-"));
 			break;
@@ -99,8 +99,8 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
 
-    
- 
+
+
 	// fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,0.0*cm));
 	// fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 	// fParticleGun->SetParticleEnergy(500.0*keV);
@@ -141,4 +141,3 @@ void PENPrimaryGeneratorAction::SetPhotonWavelength(G4double newValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
