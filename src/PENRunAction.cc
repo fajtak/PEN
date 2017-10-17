@@ -37,7 +37,7 @@ void PENRunAction::BeginOfRunAction(const G4Run* aRun)
   man->CreateH1("2","Deposited energy [MeV]",1000,0,10);
   man->CreateH1("3","Detected Wavelength [nm]",200,300,500);
   man->CreateH1("4","Created Wavelength [nm]",200,300,500);
-
+  man->CreateH1("5","Boundary Absorbed Wavelength [nm]",200,300,500);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

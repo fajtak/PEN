@@ -96,22 +96,13 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 	  		fExpectedNextStatus=Undefined;
 	  		switch(boundaryStatus){
 		  		case Absorption:
-		  			//G4cout << "Photon absorbed" << G4endl;
+		  			fEventAction->AddBAWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
+
 		  			break;
-		      	case Detection: //Note, this assumes that the volume causing detection
-		                      //is the photocathode because it is the only one with
-		                      //non-zero efficiency
+		      	case Detection:
 		      	{
-			        //Triger sensitive detector manually since photon is
-			        //absorbed but status was Detection
-			        // G4SDManager* SDman = G4SDManager::GetSDMpointer();
-			        // G4String sdName="/PENDet/pmtSD";
-			        // PENPMTSD* pmtSD = (PENPMTSD*)SDman->FindSensitiveDetector(sdName);
-			        // if(pmtSD)pmtSD->ProcessHits_constStep(theStep,NULL);
-			        // trackInformation->AddTrackStatusFlag(hitPMT);
-			      	//G4cout << "Photon detected" << G4endl
-							fEventAction->AddWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
-			      	fEventAction->AddDetectedPhoton();
+		        	fEventAction->AddWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
+		      		fEventAction->AddDetectedPhoton();
 			      	break;
 		      	}
 		      	case FresnelReflection:

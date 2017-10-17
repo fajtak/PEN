@@ -45,6 +45,13 @@ void PENEventAction::AddIWavelength(G4double wavelength){
 	analysisManager->FillH1(3,wavelength);
 }
 
+void PENEventAction::AddBAWavelength(G4double wavelength){
+	auto analysisManager = G4AnalysisManager::Instance();
+
+	analysisManager->FillH1(4,wavelength);
+}
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PENEventAction::EndOfEventAction(const G4Event* myEvent)

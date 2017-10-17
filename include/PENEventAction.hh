@@ -23,7 +23,8 @@ class PENEventAction : public G4UserEventAction
     G4int   GetNumberDetectedPhotons(void){return fDetectedPhotons;};
     void    AddDepositedEnergy(G4double newEnergy){fDepositedEnergy += newEnergy;};
     void    AddWavelength(G4double newWavelength);
-    void AddIWavelength(G4double startWavelength);
+    void    AddIWavelength(G4double startWavelength);
+    void    AddBAWavelength(G4double boundaryAbsorbedWavelength);
 
   private:
     PENRunAction* 	fRunAction;
