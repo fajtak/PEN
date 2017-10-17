@@ -100,8 +100,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   ifstream ReadAbs;
 
 //  G4String abs_file = "../input_files/OldPen.csv";
-  G4String abs_file = "../input_files/highAbs.csv";
-//  G4String abs_file = "../input_files/Exp4.csv";
+//  G4String abs_file = "../input_files/highAbs.csv";
+    G4String abs_file = "../input_files/Exp4.csv";
   ReadAbs.open(abs_file);
 
   if(ReadAbs.is_open())
@@ -174,7 +174,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
   G4RotationMatrix* rot = new G4RotationMatrix();
-  rot->rotateX(45*deg);
+  rot->rotateX(-45*deg);
   G4VPhysicalVolume* penTile_phys = new G4PVPlacement(rot,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
 
 // PMT
