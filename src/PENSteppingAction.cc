@@ -46,6 +46,9 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 	G4OpBoundaryProcessStatus boundaryStatus=Undefined;
 	static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
 
+	if (theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition() && theTrack->GetCurrentStepNumber() == 1)
+		fEventAction->AddIWavelength(G4double(1240/(theTrack->GetVertexKineticEnergy()/eV)));
+
 	//G4OpBoundaryProcessStatus boundaryStatus2 = Absorption;
 	//G4cout << boundaryStatus2.name() << G4endl;
 
