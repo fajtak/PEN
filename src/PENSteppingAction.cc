@@ -47,7 +47,7 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 	static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
 
 	//G4OpBoundaryProcessStatus boundaryStatus2 = Absorption;
-	//G4cout << boundaryStatus2.name() << G4endl; 
+	//G4cout << boundaryStatus2.name() << G4endl;
 
   //find the boundary process only once
 	if(!boundary){
@@ -106,7 +106,8 @@ void PENSteppingAction::UserSteppingAction(const G4Step * theStep)
 			        // PENPMTSD* pmtSD = (PENPMTSD*)SDman->FindSensitiveDetector(sdName);
 			        // if(pmtSD)pmtSD->ProcessHits_constStep(theStep,NULL);
 			        // trackInformation->AddTrackStatusFlag(hitPMT);
-			      	//G4cout << "Photon detected" << G4endl;
+			      	//G4cout << "Photon detected" << G4endl
+							fEventAction->AddWavelength(G4double(1240/(theTrack->GetKineticEnergy()/eV)));
 			      	fEventAction->AddDetectedPhoton();
 			      	break;
 		      	}

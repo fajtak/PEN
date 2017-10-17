@@ -16,7 +16,7 @@
 PENEventAction::PENEventAction(PENRunAction* runAction)
 : G4UserEventAction(),
 fRunAction(runAction)
-{} 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -26,18 +26,30 @@ PENEventAction::~PENEventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PENEventAction::BeginOfEventAction(const G4Event* myEvent)
-{    
+{
 	fDetectedPhotons = 0;
 	fDepositedEnergy = 0;
 	if (myEvent->GetEventID() % 1000 == 0)
 		G4cout << "event no.: " << myEvent->GetEventID() << G4endl;
 }
 
+void PENEventAction::AddWavelength(G4double wavelength){
+	auto analysisManager = G4AnalysisManager::Instance();
+
+	analysisManager->FillH1(2, wavelength);
+}
+
+void PENEventAction::AddIWavelength(G4double wavelength){
+	auto analysisManager = G4AnalysisManager::Instance();
+
+	analysisManager->FillH1(3,wavelength);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PENEventAction::EndOfEventAction(const G4Event* myEvent)
-{   
-	auto analysisManager = G4AnalysisManager::Instance(); 
+{
+	auto analysisManager = G4AnalysisManager::Instance();
 
 	if (fDetectedPhotons > 0)
 		analysisManager->FillH1(0,fDetectedPhotons);

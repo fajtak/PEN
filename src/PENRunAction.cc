@@ -31,10 +31,12 @@ void PENRunAction::BeginOfRunAction(const G4Run* aRun)
   fTimer->Start();
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  man->OpenFile("penOutput");
+  man->OpenFile("testOutput");
 
   man->CreateH1("1","N Photons Detected",500,0,5000);
   man->CreateH1("2","Deposited energy [MeV]",1000,0,10);
+  man->CreateH1("3","Detected Wavelength [nm]",200,300,500);
+  man->CreateH1("4","Created Wavelength [nm]",200,300,500);
 
 }
 

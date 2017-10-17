@@ -99,7 +99,9 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4int absEntries = 0;
   ifstream ReadAbs;
 
-  G4String abs_file = "../input_files/opticData.csv";
+//  G4String abs_file = "../input_files/OldPen.csv";
+  G4String abs_file = "../input_files/highAbs.csv";
+//  G4String abs_file = "../input_files/Exp4.csv";
   ReadAbs.open(abs_file);
 
   if(ReadAbs.is_open())
@@ -134,7 +136,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",1./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -171,8 +173,9 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4Box* penTile_box = new G4Box("Tile", 17.5*mm,17.5*mm, 2.5*mm);
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
-
-  G4VPhysicalVolume* penTile_phys = new G4PVPlacement(0,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
+  G4RotationMatrix* rot = new G4RotationMatrix();
+  rot->rotateX(45*deg);
+  G4VPhysicalVolume* penTile_phys = new G4PVPlacement(rot,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
 
 // PMT
   G4double innerRadius_pmt = 0.*cm;
@@ -191,7 +194,9 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
 
   G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
-  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(0,G4ThreeVector(0,0,66*mm),pmt_log,"pmt",expHall_log,false,0);
+  G4RotationMatrix* rotm = new G4RotationMatrix();
+  rotm->rotateX(90*deg);
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(rotm,G4ThreeVector(0,81*mm,0),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_cath,startAngle_pmt,spanningAngle_pmt);

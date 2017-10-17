@@ -6,5 +6,5 @@
 #
 #/gun/direction 5 -3 0
 #/OpNovice/gun/optPhotonPolar
-/run/beamOn 1000000
+/run/beamOn 100000
 #
