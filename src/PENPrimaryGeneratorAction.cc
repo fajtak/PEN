@@ -1,4 +1,5 @@
 #include "PENPrimaryGeneratorAction.hh"
+#include "PENPrimaryGeneratorMessenger.hh"
 
 #include "Randomize.hh"
 
@@ -19,8 +20,11 @@ fParticleGun(0)
 	G4int n_particle = 1;
 	fParticleGun = new G4ParticleGun(n_particle);
 
-  //default kinematic
-  //
+	//create a messenger for this class
+  	fGunMessenger = new PENPrimaryGeneratorMessenger(this);
+
+ 	 //default kinematic
+ 	 //
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
@@ -33,6 +37,7 @@ fParticleGun(0)
 PENPrimaryGeneratorAction::~PENPrimaryGeneratorAction()
 {
 	delete fParticleGun;
+	delete fGunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +46,7 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 	// Particle Types
 	// 	0 - perpendicular mono-energetic electrons with fixed position
-	//  1 - 207Bi
+	//  1 - 207Bi source
 	// 	2 - 90Sr source with isotropic continuous electron spectrum
 	//  3 - cosmic muons, perpendicular, homogeneously distributed
 	//  4 - monochromatic light
@@ -98,9 +103,6 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
 
 
-
-
-
 	// fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,0.0*cm));
 	// fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 	// fParticleGun->SetParticleEnergy(500.0*keV);
@@ -112,7 +114,7 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 void PENPrimaryGeneratorAction::SetSourceType(G4int newType)
 {
-	if (fSourceType < 6 && fSourceType > 0)
+	if (newType < 6 && newType > 0)
 	{
 		fSourceType = newType;
 	}

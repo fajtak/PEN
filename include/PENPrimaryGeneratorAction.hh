@@ -6,6 +6,7 @@
 
 class G4ParticleGun;
 class G4Event;
+class PENPrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -26,6 +27,7 @@ private:
 	G4ParticleGun*  fParticleGun;
 	G4int           fSourceType;
 	G4double		fPhotonWavelength;
+	PENPrimaryGeneratorMessenger* fGunMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
