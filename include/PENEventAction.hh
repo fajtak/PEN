@@ -24,10 +24,8 @@ class PENEventAction : public G4UserEventAction
     void    AddDepositedEnergy(G4double newEnergy){fDepositedEnergy += newEnergy;};
     void    AddWavelength(G4double newWavelength);
     void    AddIWavelength(G4double startWavelength);
-<<<<<<< HEAD
-=======
     void    AddBAWavelength(G4double boundaryAbsorbedWavelength);
->>>>>>> 52466bc0b086cdf657bc5c728c091019141b5de2
+
 
   private:
     PENRunAction* 	fRunAction;

@@ -113,7 +113,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
       if(ReadAbs.eof()){
         break;
       }
-      cout<<absEntries << " " <<wavelength << " " << varabsorlength << " " << ems <<endl;
+      //cout<<absEntries << " " <<wavelength << " " << varabsorlength << " " << ems <<endl;
       absEnergy[absEntries] = (1240/wavelength)*eV;
       abs[absEntries] = varabsorlength*mm;
       emission[absEntries] = ems;
