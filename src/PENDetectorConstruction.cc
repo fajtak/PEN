@@ -12,6 +12,7 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
+#include "G4UnionSolid.hh"
 
 #include <iostream>
 #include <fstream>
@@ -137,7 +138,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -170,14 +171,15 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
     = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,0);
 
 
-// PEN Tile
+// PEN
+/*
   G4Box* penTile_box = new G4Box("Tile", 17.5*mm,17.5*mm, 2.5*mm);
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
   G4RotationMatrix* rot = new G4RotationMatrix();
-  rot->rotateX(-45*deg);
+  rot->rotateX(0*deg);
   G4VPhysicalVolume* penTile_phys = new G4PVPlacement(rot,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
-
+*/
 // PMT
   G4double innerRadius_pmt = 0.*cm;
   G4double outerRadius_pmt = 5.3*cm;
@@ -196,8 +198,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
   G4RotationMatrix* rotm = new G4RotationMatrix();
-  rotm->rotateX(90*deg);
-  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(rotm,G4ThreeVector(0,81*mm,0),pmt_log,"pmt",expHall_log,false,0);
+  rotm->rotateX(0*deg);
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(rotm,G4ThreeVector(0.*mm,0,23.9*cm),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_cath,startAngle_pmt,spanningAngle_pmt);
@@ -221,6 +223,14 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   photocath_optsurf->SetMaterialPropertiesTable(photocath_MT);
   new G4LogicalSkinSurface("photocath_surf",photocath_log,photocath_optsurf);
 
+// Test 'bottle'
+
+  G4Tubs* bottleWall = new G4Tubs("bottle_wall", 15*cm, 17.5*cm, 15*cm, startAngle_pmt, spanningAngle_pmt);
+  G4Tubs* bottleBase = new G4Tubs("bottle_base", 0*cm, 17.5*cm, 1.25*cm, startAngle_pmt, spanningAngle_pmt);
+  G4UnionSolid* bottle = new G4UnionSolid("bottleSolid", bottleWall,bottleBase, 0, G4ThreeVector(0,0,16.25*cm));
+
+  G4LogicalVolume* bottle_log = new G4LogicalVolume(bottle, PEN, "bottle_log");
+  G4VPhysicalVolume* bottle_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0*cm, 0),bottle_log,"bottle", expHall_log,false,0);
 
 //-------------- Define Sensative Detector --------------
 

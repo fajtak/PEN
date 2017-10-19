@@ -58,7 +58,7 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		case 0:
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("e-"));
 			fParticleGun->SetParticleEnergy(0.3*MeV);
-			fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.0*cm,-1.0*cm));
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,-1.5*cm,-1.0*cm));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 			break;
 		case 1:
