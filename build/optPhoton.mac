@@ -6,6 +6,7 @@
 #
 #/gun/direction 5 -3 0
 #/OpNovice/gun/optPhotonPolar
-/PEN/gun/sourceType 1
+/PEN/gun/photonWavelegth 420
+/PEN/gun/sourceType 2
 /run/beamOn 10000
 #

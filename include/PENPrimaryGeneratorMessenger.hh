@@ -24,6 +24,7 @@ class PENPrimaryGeneratorMessenger: public G4UImessenger
     G4UIdirectory*                  fGunDir;
     //G4UIcmdWithADoubleAndUnit*      fPolarCmd;
     G4UIcmdWithAnInteger*			fSourceType;
+    G4UIcmdWithAnInteger*			fPhotonWavelength;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -28,7 +28,7 @@ fParticleGun(0)
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
-	fSourceType = 0;
+	fSourceType = 4;
 	fPhotonWavelength = 0;
 }
 
@@ -81,6 +81,9 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			fParticleGun->SetParticleCharge(ionCharge);
 			break;
 		case 3:
+			fParticleGun->SetParticleEnergy(4*GeV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,1.0*cm));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("mu-"));
 			break;
 		case 4:
@@ -90,7 +93,10 @@ void PENPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 				fPhotonWavelength = 420;
 			}
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("opticalphoton"));
-			fParticleGun->SetParticleEnergy(1.24/(fPhotonWavelength/1000));
+			fParticleGun->SetParticleEnergy(1.24/(fPhotonWavelength/1000)*eV);
+			fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.1,-1.0*cm));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.0));
+			fParticleGun->SetParticlePolarization(G4ThreeVector(1.0,0.,0.));
 			break;
 		case 5:
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle("opticalphoton"));
