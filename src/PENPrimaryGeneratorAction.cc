@@ -28,7 +28,7 @@ fParticleGun(0)
 	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
 
-	fSourceType = 4;
+	fSourceType = 1;
 	fPhotonWavelength = 0;
 }
 
