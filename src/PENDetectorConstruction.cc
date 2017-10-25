@@ -12,6 +12,8 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
+#include "G4UnionSolid.hh"
+#include "G4Cons.hh"
 
 #include <iostream>
 #include <fstream>
@@ -65,6 +67,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   glass->SetMaterialPropertiesTable(glassMPT);
 
   G4Material* aluminium = man->FindOrBuildMaterial("G4_Al");
+  G4Material* Si = man->FindOrBuildMaterial("G4_Si");
+
 // Water
 //
   G4Element* H = new G4Element("Hydrogen", "H", z=1 , a=1.01*g/mole);
@@ -100,9 +104,9 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   ifstream ReadAbs;
 
 //  G4String abs_file = "../input_files/OldPen.csv";
-//  G4String abs_file = "../input_files/highAbs.csv";
+  G4String abs_file = "../input_files/highAbs.csv";
 // G4String abs_file = "../input_files/flatAbs.csv";
-    G4String abs_file = "../input_files/Exp4.csv";
+//    G4String abs_file = "../input_files/Exp4.csv";
   ReadAbs.open(abs_file);
 
   if(ReadAbs.is_open())
@@ -137,7 +141,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   penMPT->AddProperty("FASTCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
   penMPT->AddProperty("SLOWCOMPONENT",absEnergy, emission, nEntries1)->SetSpline(true);
 
-  penMPT->AddConstProperty("SCINTILLATIONYIELD",100./MeV);
+  penMPT->AddConstProperty("SCINTILLATIONYIELD",10500./MeV);
   penMPT->AddConstProperty("RESOLUTIONSCALE",1.0);
   penMPT->AddConstProperty("FASTTIMECONSTANT", 5.198*ns);
   penMPT->AddConstProperty("SLOWTIMECONSTANT",24.336*ns);
@@ -169,15 +173,17 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   G4VPhysicalVolume* expHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,0);
 
+// ------------- Scintillator Volumes --------------
 
 // PEN Tile
+/*
   G4Box* penTile_box = new G4Box("Tile", 17.5*mm,17.5*mm, 2.5*mm);
 
   G4LogicalVolume* penTile_log = new G4LogicalVolume(penTile_box,PEN, "Tile",0,0,0);
   G4RotationMatrix* rot = new G4RotationMatrix();
-  rot->rotateX(-45*deg);
+  rot->rotateX(0*deg);
   G4VPhysicalVolume* penTile_phys = new G4PVPlacement(rot,G4ThreeVector(),penTile_log,"Tile",expHall_log,false,0);
-
+*/
 // PMT
   G4double innerRadius_pmt = 0.*cm;
   G4double outerRadius_pmt = 5.3*cm;
@@ -196,8 +202,8 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
 
   G4LogicalVolume* pmt_log = new G4LogicalVolume(pmt,glass, "pmt_log");
   G4RotationMatrix* rotm = new G4RotationMatrix();
-  rotm->rotateX(90*deg);
-  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(rotm,G4ThreeVector(0,81*mm,0),pmt_log,"pmt",expHall_log,false,0);
+  rotm->rotateX(0*deg);
+  G4VPhysicalVolume* pmt_phys = new G4PVPlacement(rotm,G4ThreeVector(0.*mm,0,23.9*cm),pmt_log,"pmt",expHall_log,false,0);
 
   G4Tubs* Photocath = new G4Tubs("photocath_tube",innerRadius_pmt,outerRadius_cath,
                           height_cath,startAngle_pmt,spanningAngle_pmt);
@@ -205,8 +211,7 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
                                        aluminium,
                                        "photocath_log");
 
-  G4VPhysicalVolume* cath_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),
-  photocath_log,"photocath",pmt_log,false,0);
+//  G4VPhysicalVolume* cath_phys = new G4PVPlacement(0,G4ThreeVector(0,0,0),  photocath_log,"photocath",pmt_log,false,0);
 
   G4double photocath_energy[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV , 2.917275*eV, 3.099605*eV};
   G4double photocath_EFF[]={0.16,0.19,0.20,0.22,0.23,0.25};
@@ -221,6 +226,43 @@ G4VPhysicalVolume* PENDetectorConstruction::Construct()
   photocath_optsurf->SetMaterialPropertiesTable(photocath_MT);
   new G4LogicalSkinSurface("photocath_surf",photocath_log,photocath_optsurf);
 
+
+//-------------- Define Bottle Experiment --------------
+
+// Test 'bottle'
+
+  G4Tubs* bottleWall = new G4Tubs("bottle_wall", 15*cm, 17.5*cm, 15*cm, startAngle_pmt, spanningAngle_pmt);
+//  G4Tubs* bottleBase = new G4Tubs("bottle_base", 0*cm, 17.5*cm, 1.25*cm, startAngle_pmt, spanningAngle_pmt);
+//  G4UnionSolid* bottle = new G4UnionSolid("bottleSolid", bottleWall,bottleBase, 0, G4ThreeVector(0,0,16.25*cm));
+  G4Cons* bottleLightGuide = new G4Cons("bottle_lightguide", 15*cm, 17.5*cm, 0*cm,2.5*cm, 10*cm, startAngle_pmt, spanningAngle_pmt);
+  G4UnionSolid* bottleWLG1 = new G4UnionSolid("bottleWLG1", bottleWall, bottleLightGuide,0,G4ThreeVector(0,0,25*cm));
+  G4RotationMatrix* invert = new G4RotationMatrix();
+  invert -> rotateY(180*deg);
+  G4UnionSolid* bottleWLG2 = new G4UnionSolid("bottleWLG2", bottleWLG1, bottleLightGuide,invert,G4ThreeVector(0,0,-25*cm));
+
+  G4LogicalVolume* bottle_log = new G4LogicalVolume(bottleWall, PEN, "bottle_log");
+  G4LogicalVolume* bottleLG_log = new G4LogicalVolume(bottleLightGuide,PEN,"LG");
+  G4VPhysicalVolume* bottle_phys = new G4PVPlacement(0,G4ThreeVector(0*cm,0*cm, 0),bottle_log,"bottle", expHall_log,false,0);
+  G4VPhysicalVolume* bottleLG_phys = new G4PVPlacement(0,G4ThreeVector(0,0,25.5*cm),bottleLG_log,"lg",expHall_log,false,0);
+
+// SiPM
+  G4Box* siPM_box = new G4Box("siPM_box", 1.5*cm, 1.5*cm, 0.25*mm);
+  G4LogicalVolume* siPM_log = new G4LogicalVolume(siPM_box, Si, "siPM_log");
+//  G4VPhysicalVolume* siPM_phys = new G4PVPlacement(0,G4ThreeVector(0,0,35.025*cm),siPM_log,"SiPM_1",bottle_log,false,0);
+
+// Define SiPM Properties
+
+G4double siPM_energy[] = {2.479684*eV, 2.610194*eV, 2.755204*eV, 2.883353*eV , 2.917275*eV, 3.099605*eV};
+G4double siPM_EFF[]={0.47, 0.48, 0.5, 0.48,0.47,0,45};
+assert(sizeof(siPM_EFF)==sizeof(siPM_energy));
+G4double siPM_REFL[] = {0.,0.,0.,0.,0.,0.};
+
+G4OpticalSurface* siPM_optsurf = new G4OpticalSurface("siPM_optsurf",glisur, polished, dielectric_dielectric);
+G4MaterialPropertiesTable* siPM_MT = new G4MaterialPropertiesTable();
+siPM_MT->AddProperty("EFFICIENCY", siPM_energy, siPM_EFF,6);
+siPM_MT->AddProperty("REFLECTIVITY", siPM_energy, siPM_REFL,6);
+siPM_optsurf->SetMaterialPropertiesTable(siPM_MT);
+new G4LogicalSkinSurface("siPM_surf", siPM_log, siPM_optsurf);
 
 //-------------- Define Sensative Detector --------------
 

@@ -31,7 +31,7 @@ void PENRunAction::BeginOfRunAction(const G4Run* aRun)
   fTimer->Start();
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  man->OpenFile("testOutput");
+  man->OpenFile("sourceFarEdgeOutput");
 
   man->CreateH1("1","N Photons Detected",500,0,5000);
   man->CreateH1("2","Deposited energy [MeV];Energy [MeV]; Entries/10keV [#]",1000,0,10);
